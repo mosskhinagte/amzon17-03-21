@@ -4,8 +4,8 @@ import mongoose from 'mongoose';
 import productRouter from './routers/productRouter.js';
 import userRouter from './routers/userRouter.js';
 import orderRouter from './routers/orderRouter.js';
-import path from 'path';
 import cors from 'cors';
+import path from 'path';
 
 
 dotenv.config();
@@ -46,24 +46,27 @@ app.get('/api/config/paypal', (req, res) => {
     res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
 })
 
+
+//use this to show the image you have in node js server to client (react js)
+//https://stackoverflow.com/questions/48914987/send-image-path-from-node-js-express-server-to-react-client
+app.use('/uploads', express.static('uploads'));
+
+// Serve static assets if in production
+if (process.env.NODE_ENV === "production") {
+
+    // Set static folder
+    app.use(express.static("client/build"));
+
+    // index.html for all page routes
+    app.get("*", (req, res) => {
+        res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
+    });
+}
+
 app.get('/', (req, res) => {
     res.send('/Server is ready');
 });
 
-
-if (process.env.NODE_ENV === 'production') {
-
-
-    //Set static folder
-
-    app.use(express.static('clint/build'));
-
-
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-    })
-
-}
 
 
 
