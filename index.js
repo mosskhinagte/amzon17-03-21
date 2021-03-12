@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import productRouter from './routers/productRouter.js';
 import userRouter from './routers/userRouter.js';
 import orderRouter from './routers/orderRouter.js';
+import path from 'path';
 import cors from 'cors';
 
 
@@ -49,6 +50,20 @@ app.get('/', (req, res) => {
     res.send('/Server is ready');
 });
 
+
+if (process.env.NODE_ENV === 'production') {
+
+
+    //Set static folder
+
+    app.use(express.static('clint/build'));
+
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    })
+
+}
 
 
 
